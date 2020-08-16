@@ -1,0 +1,13 @@
+@import "~@ionic/react/css/ionic.bundle.css";
+
+h1, p {
+  font-family: Lato;
+}
+
+.datepicker {
+  height: 100px
+}
+
+img{
+  min-width: 100%;
+}
