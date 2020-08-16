@@ -5,7 +5,9 @@ const initialState: AppContextState = {
     playing: {
         index: 0,
         progress: 27000,
-        paused: false,
+        isPlaying: false,
+        currentAudioTime: '0:00',
+        percentPlayed: 0
     },
     auth: {
         user: null,
@@ -20,75 +22,104 @@ const initialState: AppContextState = {
     music: {
         tracks: [
             {
-                id: "0",
-                title: "Quiereme Mientras se pueda",
-                artist: "Manuel Turizo",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1588542709/vapemusic2/2020/4/Quiereme_Mientras_Se_Pueda.jpg",
-                time: 359000,
+                id: "5de11a305a58b41df485e98a",
+                name: "Ozuna - Dificil Olvidar",
+                audioUrl:
+                    "https://res.cloudinary.com/wlopez/video/upload/v1575033391/vapemusic2/2019/10/Ozuna%20%E2%80%93%20Dif%C3%ADcil%20Olvidar.mp3/gkxjvzeulzhoy9l0mzz8.mp3",
+                imageUrl:
+                    "https://res.cloudinary.com/wlopez/image/upload/v1575033390/vapemusic2/2019/10/Ozuna%20-%20Niviru%20Cover.jpg/Ozuna_-_Niviru_Cover_z7mtjj.jpg",
+                artist: "Ozuna",
+                title: "Dificil De Olvidar",
+                artistList: [],
+                genre: "Reggaeton",
             },
             {
-                id: "5eaf3ee26eccb80012ac8056",
-                title: "Casino",
-                artist: "Sech",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1588542708/vapemusic2/2020/4/Casino.jpg",
-                time: 216000,
+                id: "5e514f8e47f6b853d0439a89",
+                name: "Reik Ft. Farruko &  Camilo - Si Me Dices Que Si",
+                audioUrl:
+                    "https://res.cloudinary.com/wlopez/video/upload/v1582387085/vapemusic2/2020/1/Farruko_-_Si_Me_Dices_Que_Si.mp3",
+                imageUrl:
+                    "https://res.cloudinary.com/wlopez/image/upload/v1582385647/vapemusic2/2020/1/Si_Me_Dices_Que_Si.jpg",
+                artist: "Reik Ft. Farruko &  Camilo",
+                artistList: [],
+                genre: "Reggaeton",
+                title: "Si Me Dices Que Si",
             },
             {
-                id: "2",
-                title: "Girasoles",
-                artist: "Luis Fonsi",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1588542047/vapemusic2/2020/4/Girasoles.jpg",
-                time: 339000,
-            },
-            {
-                id: "3",
-                title: "Memories",
-                artist: "Marron 5",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1588541083/vapemusic2/2020/4/Memories.jpg",
-                time: 257000,
-            },
-            {
-                id: "4",
-                title: "Mamacita",
-                artist: "Ozuna ft. Black Eyed Peas",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1586731293/vapemusic2/2020/3/Mamacita.png",
-                time: 555000,
-            },
-            {
-                id: "5",
-                title: "Carne",
-                artist: "Don Miguelo",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1588628156/vapemusic2/2020/4/Carne.jpg",
-                time: 411000,
-            },
-            {
-                id: "6",
-                title: "Velitas",
-                artist: "Darell ft. Brytiago",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1566749825/pxmusic/images/2019/7/736Darell_Ft_Brytiago_-_Velitas_k9k0d0.jpg",
-                time: 251000,
-            },
-            {
-                id: "7",
+                id: "5e514f8e47f6b853d0439a19",
+                name: "Reik Ft. Farruko &  Camilo - Si Me Dices Que Si",
+                audioUrl:
+                    "https://res.cloudinary.com/wlopez/video/upload/v1582387085/vapemusic2/2020/1/Farruko_-_Si_Me_Dices_Que_Si.mp3",
+                artistList: [],
+                genre: "Reggaeton",
                 title: "Capricornio",
                 artist: "Arcangel",
-                img: "https://res.cloudinary.com/wlopez/image/upload/v1577401075/vapemusic2/2019/11/Arcangel_-_Historias_de_un_Capricornio_g6p2su.jpg",
-                time: 444000,
+                imageUrl: "https://res.cloudinary.com/wlopez/image/upload/v1577401075/vapemusic2/2019/11/Arcangel_-_Historias_de_un_Capricornio_g6p2su.jpg",
             },
+            {
+                album: "YHLQMDLG",
+                artist: "Bad Bunny",
+                artistList: ["bad bunny"],
+                audioUrl: "https://res.cloudinary.com/wlopez/video/upload/v1583164622/vapemusic2/2020/2/dds4cztgxwdzmtvlgrfl.mp3",
+                createdAt: "2020-03-02T15:57:04.814Z",
+                genre: "Reggaeton",
+                id: "5e5d2cd01d30ca3670e2311b",
+                imageUrl: "https://res.cloudinary.com/wlopez/image/upload/v1583164475/vapemusic2/2020/2/La_Dificil.jpg",
+                name: "Bad Bunny - La Dificil",
+                promoted: true,
+                title: "La Dificil",
+                updatedAt: "2020-03-02T15:57:04.814Z",
+                viewCount: 7,
+            },
+            {
+                album: "Six Feet Apart - Luke Combs (Unreleased, New Song) (Performed at the Grand Ole Opry)",
+                artist: "Luke Combs",
+                artistList: ["luke combs"],
+                audioUrl: "https://res.cloudinary.com/wlopez/video/upload/v1588539413/vapemusic2/2020/4/Six_Feet_Apart_-_Luke_Combs_Unreleased.mp3",
+                createdAt: "2020-05-03T20:56:54.473Z",
+                genre: "pop-r&b",
+                id: "5eaf30166eccb80012ac804e",
+                imageUrl: "https://res.cloudinary.com/wlopez/image/upload/v1588538906/vapemusic2/2020/4/Six_Feet_Apart_Unreleased.jpg",
+                name: "Luke Combs - Six Feet Apart (Unreleased)",
+                promoted: true,
+                title: "Six Feet Apart (Unreleased)",
+                updatedAt: "2020-05-03T20:56:54.473Z",
+                viewCount: 6,
+            }
         ],
-        hotTracks: ["0", "5eaf3ee26eccb80012ac8056", "2", "3"],
-        newTracks: ["4", "5", "6", "7"],
+        hotTracks: ["5de11a305a58b41df485e98a", "5e514f8e47f6b853d0439a19", "5e5d2cd01d30ca3670e2311b"],
+        newTracks: ["5de11a305a58b41df485e98a", "5e514f8e47f6b853d0439a19", "5e5d2cd01d30ca3670e2311b", "5eaf30166eccb80012ac804e"],
     },
 };
 
+
+export type Song = {
+    id: string,
+    artist: string,
+    title: string,
+    genre: string,
+    album?: string,
+    viewCount?: number,
+    promoted?: boolean,
+    imageUrl: string,
+    audioUrl: string,
+    createdAt?: string,
+    updatedAt?: string,
+    artistList?: Array<string>,
+    name: string,
+};
+
+
 export interface PlayingState {
-    index?: number;
-    progress?: number;
-    paused?: boolean;
+    index: number;
+    isPlaying: boolean;
+    currentAudioTime: string
+    percentPlayed: number
+    progress: number
 }
 
 export interface AppContextState {
-    playing: PlayingState | null;
+    playing: PlayingState;
     dispatch: React.Dispatch<Actions>;
     user: {
         favTracks: ITrack[];
@@ -112,14 +143,14 @@ export interface User {
     email: string;
     id: string;
 }
-
-export interface ITrack {
-    id: string;
-    title: string;
-    artist: string;
-    img: string;
-    time: number;
-}
+export type ITrack = Song
+// export interface ITrack {
+//     id: string;
+//     title: string;
+//     artist: string;
+//     img: string;
+//     time: number;
+// }
 export const AppContext = React.createContext<AppContextState>(
     {} as AppContextState,
 );
@@ -166,6 +197,16 @@ type LOGGED_IN_ACTION = {
 type LOGOUT_ACTION = {
     type: "LOGOUT";
 };
+type PERCENT_PLAYED_ACTION = {
+    type: "PERCENT_PLAYED";
+    payload: number
+};
+
+type AUDIO_TIME_ACTION = {
+    type: "AUDIO_TIME";
+    payload: string
+};
+
 export type Actions =
     | SET_PLAYER_OPEN_ACTION
     | PAUSE_ACTION
@@ -175,7 +216,8 @@ export type Actions =
     | PREV_ACTION
     | FAV_ACTION
     | LOGGED_IN_ACTION
-    | LOGOUT_ACTION;
+    | LOGOUT_ACTION
+    | PERCENT_PLAYED_ACTION | AUDIO_TIME_ACTION
 
 export interface Action {
     type: Actions;
@@ -205,9 +247,8 @@ const reducer = (state: AppContextState, action: Actions) => {
                 ...state,
                 playing: {
                     ...playing,
-                    index: state.playing?.index,
-                    progress: state.playing?.progress,
                     paused: true,
+                    isPlaying: false,
                 },
             };
         }
@@ -230,8 +271,11 @@ const reducer = (state: AppContextState, action: Actions) => {
                     playing: {
                         ...playing,
                         index,
+                        isPlaying: true,
                         progress: 0,
                         paused: false,
+                        currentAudioTime: 0,
+                        percentPlayed: '0'
                     },
                 };
             }
@@ -240,6 +284,7 @@ const reducer = (state: AppContextState, action: Actions) => {
                 playing: {
                     ...playing,
                     paused: false,
+                    isPlaying: true
                 },
             };
         }
@@ -248,7 +293,7 @@ const reducer = (state: AppContextState, action: Actions) => {
                 ...state,
                 playing: {
                     ...playing,
-                    progress: action.time <= ct.time ? Math.floor(action.time) : ct.time,
+                    progress: action.time
                 },
             };
         }
@@ -256,7 +301,7 @@ const reducer = (state: AppContextState, action: Actions) => {
             return {
                 ...state,
                 playing: {
-                    index: ((playing?.index || 0) + 1) % getTracks(state).length,
+                    index: (playing.index + 1) % getTracks(state).length,
                     progress: 0,
                 },
             };
@@ -302,6 +347,20 @@ const reducer = (state: AppContextState, action: Actions) => {
                         user: action.user,
                     },
                 };
+            }
+        case "PERCENT_PLAYED":
+            return {
+                ...state, playing: {
+                    ...state.playing,
+                    percentPlayed: action.payload
+                }
+            }
+        case "AUDIO_TIME":
+            return {
+                ...state, playing: {
+                    ...state.playing,
+                    currentAudioTime: action.payload
+                }
             }
         default:
             return state;
@@ -383,6 +442,16 @@ export const ActionCreators = {
     nextTrack: () => ({
         type: "NEXT",
     } as NEXT_ACTION),
+
+    setPercentPlayed: (percent: number) => ({
+        type: 'PERCENT_PLAYED',
+        payload: percent
+    } as PERCENT_PLAYED_ACTION),
+
+    setCurrentAudioTime: (time: string) => ({
+        type: "AUDIO_TIME",
+        payload: time
+    } as AUDIO_TIME_ACTION),
 
     prevTrack: () => ({
         type: "PREV",

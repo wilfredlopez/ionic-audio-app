@@ -18,8 +18,7 @@ const Readme = () => {
                 <h2>Built with Ionic React</h2>
                 <p>
                     <b>
-                        Disclaimer: this app does not actually play audio (due to licensing
-                        and lack of public APIs reasons)
+                        Disclaimer: This app is only for demostration purpuses.
           </b>
                 </p>
 

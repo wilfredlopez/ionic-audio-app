@@ -27,45 +27,41 @@ import {
     AppContext,
     isPlayerOpen,
     ActionCreators,
-    getPlaying,
     getCurrentTrack,
     isFavTrack,
-    ITrack, PlayingState
+    ITrack,
 } from "../State";
 
-import { img, msToTime } from "../util";
-
+import useAudioControls from '../hooks/useAudioControls'
 import "./TrackPlayer.css";
 
 interface TrackProgressProps {
-    playing: PlayingState
-    track: ITrack,
+    currentAudioTime: string
+    percentPlayed: number
     onSeek: (time: number) => void
 }
 
-const TrackProgress = ({ playing, track, onSeek }: TrackProgressProps) => {
-    const progress = playing.progress;
-    const left = track.time - (progress || 0);
-    const percent = ((progress || 0) / track.time) * 100;
+const TrackProgress = ({ onSeek, percentPlayed, currentAudioTime }: TrackProgressProps) => {
 
-    const s = (p: number) => {
-        const newTime = (p / 100) * track.time;
-        onSeek(newTime);
-    };
     return (
         <div className="track-progress">
             <IonRange
-                value={percent}
+                value={percentPlayed}
                 onIonChange={(e: any) => {
-                    s(e.target.value as any);
+                    const value = e.detail.value;
+                    if (+value !== percentPlayed)
+                    {
+                        onSeek(+e.detail.value);
+                    }
                 }}
             />
             <div className="track-progress-time">
                 <div className="track-progress-time-current">
-                    {msToTime(progress || 0)}
+                    {currentAudioTime}
+                    {/* {msToTime(time)} */}
                 </div>
                 <div className="track-progress-time-left">
-                    -{msToTime(left)}
+                    {/* -{msToTime(left)} */}
                 </div>
             </div>
         </div>
@@ -73,7 +69,7 @@ const TrackProgress = ({ playing, track, onSeek }: TrackProgressProps) => {
 };
 
 interface TrackControlProps {
-    playing: PlayingState
+    isPlaying: boolean
     track?: ITrack
     isFav?: boolean
     onPause: () => void
@@ -84,13 +80,13 @@ interface TrackControlProps {
 }
 
 const TrackControls = (
-    { playing, isFav, onPause, onPlay, onPrev, onNext, onFav }: TrackControlProps,
+    { isPlaying, isFav, onPause, onPlay, onPrev, onNext, onFav }: TrackControlProps,
 ) => {
     return (
         <div className="track-controls track-controls-full">
             <IonIcon onClick={onFav} icon={isFav ? heart : heartOutline} />
             <IonIcon onClick={onPrev} icon={playSkipBack} />
-            {playing.paused
+            {!isPlaying
                 ? (
                     <IonIcon onClick={onPlay} className="play-pause" icon={play} />
                 )
@@ -107,63 +103,151 @@ interface TrackPlayerProps {
     track?: ITrack
     closed?: boolean
 }
-const TrackPlayer = ({ closed }: TrackPlayerProps) => {
+
+function turnSecondsToMinutes(s: number) {
+    return (s - (s %= 60)) / 60 + (9 < Math.round(s) ? ":" : ":0") + Math.round(s)
+}
+
+
+const TrackPlayer = (_props: TrackPlayerProps) => {
     const state = useContext(AppContext);
     const dispatch = state.dispatch
-    const playing = getPlaying(state);
+    const { isPlaying } = state.playing
     const handleClose = useCallback(() => {
         dispatch(ActionCreators.closePlayer());
     }, [dispatch]);
 
-    if (!playing)
-    {
-        return null;
-    }
+    // const [muted, setMuted] = React.useState(false);
+    const currentAudioTimeRef = React.useRef("0");
+
+    // function toggleMute() {
+    //     if (muted)
+    //     {
+    //         controls.unmute();
+    //         setMuted(false);
+    //     } else
+    //     {
+    //         controls.mute();
+    //         setMuted(true);
+    //     }
+    // }
+    const handleTogglePlaying = () => {
+        if (isPlaying)
+        {
+            // controls.pause();//useEffect should do it automatically
+            dispatch(ActionCreators.pauseTrack())
+        } else
+        {
+            // controls.play(); //useEffect should do it automatically
+            dispatch(ActionCreators.playTrack())
+        }
+    };
 
     const open = isPlayerOpen(state);
     const track = getCurrentTrack(state);
     const isFav = isFavTrack(state, track);
+    const [{ audio, controls, state: audioState }] = useAudioControls({
+        src: track.audioUrl,
+        autoPlay: false,
+        loop: false,
+        "aria-label": track.name,
+    });
+
+    const percentPlayed = audioState.percentPlayed
+
+    React.useEffect(() => {
+        dispatch(ActionCreators.setPercentPlayed(percentPlayed))
+        //eslint-disable-next-line
+    }, [percentPlayed])
+
+    //React to change in isPlaying state.
+    React.useEffect(() => {
+        if (isPlaying)
+        {
+            controls.play()
+        } else
+        {
+            controls.pause()
+        }
+        //eslint-disable-next-line
+    }, [isPlaying, track])
+
+    React.useLayoutEffect(() => {
+        if (currentAudioTimeRef)
+        {
+            let totalPercent = turnSecondsToMinutes(audioState.time);
+            currentAudioTimeRef.current = totalPercent;
+            dispatch(ActionCreators.setCurrentAudioTime(totalPercent))
+        }
+        //eslint-disable-next-line
+    }, [audioState.time]);
+
+
+    function handleSeek(seekTo: number) {
+        controls.seek(seekTo);
+    }
+
+    //Autoplay... causing issues.
+    // React.useLayoutEffect(() => {
+
+    //         if (!playing.isPlaying)
+    //         {
+    //             controls.play();
+    //             dispatch(ActionCreators.playTrack())
+    //         }
+    //         return () => {
+    //             controls.pause();
+    //             dispatch(ActionCreators.pauseTrack())
+    //         };
+    //         //eslint-disable-next-line
+    // }, [ playing, controls]);
 
 
     return (
-        <IonModal
-            isOpen={open}
+        <React.Fragment>
+            {audio}
+            <IonModal
+                isOpen={open}
 
-            onDidDismiss={handleClose}
-        >
-            <IonHeader className="track-player">
-                <IonToolbar>
-                    <IonButtons slot="start">
-                        <IonButton fill="clear" onClick={() => dispatch(ActionCreators.closePlayer())}>
-                            <IonIcon icon={arrowDown} />
-                        </IonButton>
-                    </IonButtons>
-                    <IonTitle>
-                        {track.title}
-                    </IonTitle>
-                </IonToolbar>
-            </IonHeader>
-            <IonContent className="track-content">
-                <img src={img(track.img)} alt={track.title} />
-                <h2>{track.title}</h2>
-                <h4>{track.artist}</h4>
-                <TrackProgress
-                    playing={playing}
-                    track={track}
-                    onSeek={(n: number) => dispatch(ActionCreators.seekTrack(n))}
-                />
-                <TrackControls
-                    playing={playing}
-                    track={track}
-                    isFav={isFav}
-                    onPause={() => dispatch(ActionCreators.pauseTrack())}
-                    onPlay={() => dispatch(ActionCreators.playTrack())}
-                    onPrev={() => dispatch(ActionCreators.prevTrack())}
-                    onNext={() => dispatch(ActionCreators.nextTrack())}
-                    onFav={() => dispatch(ActionCreators.favTrack(track))}
-                />
-            </IonContent>
-        </IonModal>
+                onDidDismiss={handleClose}
+            >
+                <IonHeader className="track-player">
+                    <IonToolbar>
+                        <IonButtons slot="start">
+                            <IonButton fill="clear" onClick={() => dispatch(ActionCreators.closePlayer())}>
+                                <IonIcon icon={arrowDown} />
+                            </IonButton>
+                        </IonButtons>
+                        <IonTitle>
+                            {track.title}
+
+                        </IonTitle>
+                    </IonToolbar>
+                </IonHeader>
+                <IonContent className="track-content">
+                    <img src={track.imageUrl} alt={track.title} />
+                    <h2>{track.title}</h2>
+                    <h4>{track.artist}</h4>
+                    <TrackProgress
+                        percentPlayed={audioState.percentPlayed}
+                        currentAudioTime={currentAudioTimeRef.current}
+                        onSeek={(n: number) => handleSeek(n)}
+                    />
+                    <TrackControls
+                        isPlaying={isPlaying}
+                        track={track}
+                        isFav={isFav}
+                        onPause={() => {
+                            handleTogglePlaying()
+                        }}
+                        onPlay={() => handleTogglePlaying()}
+                        onPrev={() => dispatch(ActionCreators.prevTrack())}
+                        onNext={() => dispatch(ActionCreators.nextTrack())}
+                        onFav={() => dispatch(ActionCreators.favTrack(track))}
+                    />
+                </IonContent>
+            </IonModal>
+        </React.Fragment>
     );
 };
 

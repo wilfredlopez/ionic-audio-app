@@ -10,7 +10,7 @@ import {
 import { IonReactRouter } from '@ionic/react-router';
 import React from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import Audio from './components/Audio';
+// import Audio from './components/Audio';
 import TrackPlayer from './components/TrackPlayer';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword';
@@ -42,7 +42,7 @@ const App = () => {
               <Route exact={true} path="/" render={() => <Redirect to={urls.APP_HOME} />} />
             </IonRouterOutlet>
             <Route path="/app" component={Tabs} />
-            <Audio />
+            {/* <Audio /> */}
             <TrackPlayer />
           </IonPage>
         </IonReactRouter>

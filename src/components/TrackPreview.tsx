@@ -19,17 +19,16 @@ interface TrackProps {
     track: ITrack
 }
 
-const TrackProgress = ({ playing, track }: TrackProps) => {
-    const progress = playing.progress;
+const TrackProgress = ({ playing }: TrackProps) => {
+    // const progress = playing.progress;
     // const left = track.time - (progress || 0);
-    const percent = ((progress || 0) / track.time) * 100;
-
+    // const percent = ((progress || 0) / 20) * 100;
     return (
         <div className="track-preview-progress">
             <div className="track-preview-progress-track">
                 <div
                     className="track-preview-progress-current"
-                    style={{ width: `${percent}%` }}
+                    style={{ width: `${playing.percentPlayed}%` }}
                 >
                 </div>
             </div>
@@ -37,10 +36,8 @@ const TrackProgress = ({ playing, track }: TrackProps) => {
     );
 };
 
-interface Props {
-    tabBarTop?: number
-}
-const TrackPreview = ({ tabBarTop = 0 }: Props) => {
+
+const TrackPreview = () => {
     const state = useContext(AppContext);
     const dispatch = state.dispatch
     const playing = getPlaying(state);
@@ -52,7 +49,7 @@ const TrackPreview = ({ tabBarTop = 0 }: Props) => {
         // Stop the toggle from opening the modal
         e.stopPropagation();
 
-        if (playing?.paused)
+        if (!playing.isPlaying)
         {
             dispatch(ActionCreators.playTrack());
         } else
@@ -64,7 +61,6 @@ const TrackPreview = ({ tabBarTop = 0 }: Props) => {
     if (!playing) return null;
     return (
         <div
-            style={{ top: `${tabBarTop}px` }}
             className="track-preview"
             onClick={() => dispatch(ActionCreators.openPlayer())}
         >
@@ -73,7 +69,7 @@ const TrackPreview = ({ tabBarTop = 0 }: Props) => {
             <div className="track-preview-wrapper">
                 <div className="track-thumbnail">
                     <IonThumbnail>
-                        <img src={img(track.img)} alt={track.title} className="track-art" />
+                        <img src={img(track.imageUrl)} alt={track.title} className="track-art" />
                     </IonThumbnail>
                 </div>
 
@@ -84,7 +80,7 @@ const TrackPreview = ({ tabBarTop = 0 }: Props) => {
                 </div>
 
                 <div className="track-controls">
-                    {playing.paused
+                    {!playing.isPlaying
                         ? (
                             <IonIcon icon={play} onClick={doPlayToggle} />
                         )

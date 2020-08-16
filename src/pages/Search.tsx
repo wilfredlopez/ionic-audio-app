@@ -63,7 +63,7 @@ const Search = () => {
                 {tracks.map((track) => (
                     <IonItem key={track.title} onClick={() => doPlay(track)} button>
                         <IonThumbnail slot="start">
-                            <img src={img(track.img)} alt={track.title} />
+                            <img src={img(track.imageUrl)} alt={track.title} />
                         </IonThumbnail>
                         <IonLabel>
                             <h2>{track.title}</h2>
