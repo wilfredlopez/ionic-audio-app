@@ -21,6 +21,13 @@ const Readme = () => {
                         Disclaimer: This app is only for demostration purpuses.
           </b>
                 </p>
+                <p>
+                    For More Information contact me at <a
+                        href="https://wilfredlopez.net"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >wilfredlopez.net</a>
+                </p>
 
             </IonContent>
         </IonPage>

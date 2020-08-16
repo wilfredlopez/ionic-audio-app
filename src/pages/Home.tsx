@@ -7,6 +7,7 @@ import {
     IonRow, IonThumbnail, IonTitle, IonToolbar
 } from "@ionic/react";
 import React, { useCallback, useContext } from "react";
+import { APP_TITLE } from "src/constants";
 import { AppContext, getHotTracks, getNewTracks, ActionCreators } from "../State";
 import { img } from "../util";
 import "./Home.css";
@@ -26,7 +27,7 @@ const Home = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Music</IonTitle>
+                    <IonTitle>{APP_TITLE}</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent>
@@ -60,7 +61,7 @@ const Home = () => {
                                     key={track.title}
                                     onClick={() => doPlay(track)}
                                 >
-                                    <img src={img(track.imageUrl)} alt={track.title} />
+                                    <img src={track.imageUrl} alt={track.title} />
                                     <IonItem lines="none">
                                         <IonLabel>
                                             <h3>{track.title}</h3>
