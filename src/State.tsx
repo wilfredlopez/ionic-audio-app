@@ -1,4 +1,5 @@
 import React, { Reducer } from "react";
+import { assertNever, deepCopy } from '@wilfredlopez/react-utils/dist'
 
 const initialState: AppContextState = {
     dispatch: () => { },
@@ -207,6 +208,16 @@ type AUDIO_TIME_ACTION = {
     payload: string
 };
 
+type ADD_SONGS_ACTION = {
+    type: "ADD_SONGS";
+    payload: ITrack[]
+};
+
+type ADD_SONGS_IF_NOT_ACTION = {
+    type: "ADD_SONGS_IF_NOT";
+    payload: ITrack[]
+}
+
 export type Actions =
     | SET_PLAYER_OPEN_ACTION
     | PAUSE_ACTION
@@ -216,7 +227,7 @@ export type Actions =
     | PREV_ACTION
     | FAV_ACTION
     | LOGGED_IN_ACTION
-    | LOGOUT_ACTION
+    | LOGOUT_ACTION | ADD_SONGS_ACTION | ADD_SONGS_IF_NOT_ACTION
     | PERCENT_PLAYED_ACTION | AUDIO_TIME_ACTION
 
 export interface Action {
@@ -226,7 +237,7 @@ export interface Action {
 
 export type AppReducer = Reducer<AppContextState, Actions>;
 
-const reducer = (state: AppContextState, action: Actions) => {
+const reducer = (state: AppContextState, action: Actions): AppContextState => {
     const playing = getPlaying(state);
     const ct = getCurrentTrack(state);
     const user = getUser(state);
@@ -247,7 +258,6 @@ const reducer = (state: AppContextState, action: Actions) => {
                 ...state,
                 playing: {
                     ...playing,
-                    paused: true,
                     isPlaying: false,
                 },
             };
@@ -258,9 +268,23 @@ const reducer = (state: AppContextState, action: Actions) => {
                 const newRecentTracks = getRecentTracks(state).filter((t) =>
                     t.id !== action.track.id
                 );
-                const index = getTrackIndex(state, action.track.id);
+                //if track comes from search it might not exist.
+                let index = getTrackIndex(state, action.track.id);
+                let tracks = state.music.tracks
+
+                //adding track to end of the array of tracks if index=-1 and settings index to last.
+                if (index === -1)
+                {
+                    index = tracks.length
+                    tracks.push(action.track)
+                }
+
                 return {
                     ...state,
+                    music: {
+                        ...state.music,
+                        tracks: [...tracks]
+                    },
                     ui: {
                         playerOpen: true,
                     },
@@ -273,9 +297,8 @@ const reducer = (state: AppContextState, action: Actions) => {
                         index,
                         isPlaying: true,
                         progress: 0,
-                        paused: false,
-                        currentAudioTime: 0,
-                        percentPlayed: '0'
+                        currentAudioTime: '0',
+                        percentPlayed: 0
                     },
                 };
             }
@@ -283,7 +306,6 @@ const reducer = (state: AppContextState, action: Actions) => {
                 ...state,
                 playing: {
                     ...playing,
-                    paused: false,
                     isPlaying: true
                 },
             };
@@ -301,6 +323,7 @@ const reducer = (state: AppContextState, action: Actions) => {
             return {
                 ...state,
                 playing: {
+                    ...state.playing,
                     index: (playing.index + 1) % getTracks(state).length,
                     progress: 0,
                 },
@@ -310,6 +333,7 @@ const reducer = (state: AppContextState, action: Actions) => {
             return {
                 ...state,
                 playing: {
+                    ...state.playing,
                     index: Math.max(0, (state.playing?.index || 0) - 1),
                     progress: 0,
                 },
@@ -331,7 +355,14 @@ const reducer = (state: AppContextState, action: Actions) => {
         case "LOGOUT": {
             return {
                 ...state,
-                playing: null,
+                playing: {
+                    ...state.playing,
+                    isPlaying: false,
+                    currentAudioTime: '0',
+                    index: 0,
+                    percentPlayed: 0,
+                    progress: 0
+                },
                 auth: {
                     ...state.auth,
                     user: null,
@@ -362,7 +393,31 @@ const reducer = (state: AppContextState, action: Actions) => {
                     currentAudioTime: action.payload
                 }
             }
+        case "ADD_SONGS": {
+            const oldTracks = deepCopy(state.music.tracks)
+            const newTracks = action.payload.map(s => s.id)
+            const hotTracks = action.payload.filter(s => s.promoted && s.promoted === true).map(s => s.id)
+            return {
+                ...state,
+                music: {
+                    ...state.music,
+                    tracks: [...action.payload, ...oldTracks,],
+                    newTracks: [...newTracks, ...state.music.newTracks,],
+                    hotTracks: [...hotTracks, ...state.music.hotTracks,]
+                }
+            }
+        }
+        case "ADD_SONGS_IF_NOT": {
+            return {
+                ...state,
+                music: {
+                    ...state.music,
+                    tracks: [...action.payload, ...state.music.tracks,],
+                }
+            }
+        }
         default:
+            assertNever(action)
             return state;
     }
 };
@@ -447,6 +502,16 @@ export const ActionCreators = {
         type: 'PERCENT_PLAYED',
         payload: percent
     } as PERCENT_PLAYED_ACTION),
+
+    addSongs: (songs: ITrack[]) => ({
+        type: 'ADD_SONGS',
+        payload: songs
+    } as ADD_SONGS_ACTION),
+
+    addSongsIfNotExist: (songs: ITrack[]) => ({
+        type: 'ADD_SONGS_IF_NOT',
+        payload: songs
+    } as ADD_SONGS_IF_NOT_ACTION),
 
     setCurrentAudioTime: (time: string) => ({
         type: "AUDIO_TIME",

@@ -8,6 +8,7 @@ import {
 } from "@ionic/react";
 import React, { useCallback, useContext } from "react";
 import { APP_TITLE } from "src/constants";
+
 import { AppContext, getHotTracks, getNewTracks, ActionCreators } from "../State";
 import { img } from "../util";
 import "./Home.css";
@@ -23,6 +24,8 @@ const Home = () => {
         dispatch(ActionCreators.playTrack(track));
     }, [dispatch]);
 
+
+
     return (
         <IonPage>
             <IonHeader>
@@ -36,7 +39,7 @@ const Home = () => {
                         <IonLabel>Hot Tracks</IonLabel>
                     </IonListHeader>
                     {hotTracks.map((track) => (
-                        <IonItem key={track.title} onClick={() => doPlay(track)} button>
+                        <IonItem key={track.id + '-hottracks'} onClick={() => doPlay(track)} button>
                             <IonThumbnail slot="start">
                                 <img src={img(track.imageUrl)} alt={track.title} />
                             </IonThumbnail>
@@ -58,7 +61,7 @@ const Home = () => {
                                 <IonCol
                                     size={'6'}
                                     className="new-track"
-                                    key={track.title}
+                                    key={track.id + "-NewTracks"}
                                     onClick={() => doPlay(track)}
                                 >
                                     <img src={track.imageUrl} alt={track.title} />

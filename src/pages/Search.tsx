@@ -12,9 +12,10 @@ import {
     useIonViewDidEnter
 } from "@ionic/react";
 import React, { useCallback, useContext, useRef, useState } from "react";
-import { search } from "../search";
+import { useSearchSongsLazyQuery } from "src/hooks/useSearchSongsQuery";
+// import { search } from "../search";
 import { AppContext, ITrack, ActionCreators } from "../State";
-import { img } from "../util";
+import { img, debounce } from "../util";
 
 
 
@@ -22,22 +23,45 @@ import { img } from "../util";
 const Search = () => {
     const state = useContext(AppContext);
     const dispatch = state.dispatch
+
     // const [isSearching, setIsSearching] = useState(false);
     const [tracks, setTracks] = useState<ITrack[]>([]);
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
 
+
+    const [searchSongs] = useSearchSongsLazyQuery({
+        onCompleted: (completeQuery) => {
+            if (completeQuery.searchSongs.songs)
+            {
+                // ActionCreators.addSongsIfNotExist(completeQuery.searchSongs.songs as ITrack[])
+                setTracks(completeQuery.searchSongs.songs as ITrack[])
+            }
+        }
+    })
+
     const doSearch = useCallback(async (e: CustomEvent<SearchbarChangeEventDetail>) => {
+
+        const delayedQuery = debounce(function (query: string) {
+            searchSongs({
+                variables: {
+                    query: query,
+                }
+            })
+            //setTracks(await search(q, state));
+        }, 500);
+
         //@ts-ignore
-        const q = e.target?.value as any || "";
+        const q = e.target?.value as string || "";
 
         if (!q)
         {
             setTracks([]);
             return;
         }
-
-        setTracks(await search(q, state));
-    }, [state]);
+        delayedQuery(q)
+    }, [searchSongs
+        // state
+    ]);
 
     const doPlay = useCallback((track) => {
         dispatch(ActionCreators.playTrack(track));
@@ -61,7 +85,7 @@ const Search = () => {
             </IonHeader>
             <IonContent>
                 {tracks.map((track) => (
-                    <IonItem key={track.title} onClick={() => doPlay(track)} button>
+                    <IonItem key={track.id + '-tracks'} onClick={() => doPlay(track)} button>
                         <IonThumbnail slot="start">
                             <img src={img(track.imageUrl)} alt={track.title} />
                         </IonThumbnail>

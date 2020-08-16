@@ -86,7 +86,7 @@ const You = () => {
                         <IonLabel>Recent Tracks</IonLabel>
                     </IonListHeader>
                     {recentTracks.map((track) => (
-                        <IonItem key={track.title} onClick={() => doPlay(track)} button>
+                        <IonItem key={track.id + "-RecentTracks"} onClick={() => doPlay(track)} button>
                             <IonThumbnail slot="start">
                                 <img src={img(track.imageUrl)} alt={track.title} />
                             </IonThumbnail>
@@ -103,7 +103,7 @@ const You = () => {
                         <IonLabel>Favorite Tracks</IonLabel>
                     </IonListHeader>
                     {favTracks.map((track) => (
-                        <IonItem key={track.title} onClick={() => doPlay(track)} button>
+                        <IonItem key={track.id + "-FavTracks"} onClick={() => doPlay(track)} button>
                             <IonThumbnail slot="start">
                                 <img src={img(track.imageUrl)} alt={track.title} />
                             </IonThumbnail>
