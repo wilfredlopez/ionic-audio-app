@@ -1,114 +1,33 @@
 import React, { Reducer } from "react";
 import { assertNever, deepCopy } from '@wilfredlopez/react-utils/dist'
-
-const initialState: AppContextState = {
-    dispatch: () => { },
-    playing: {
-        index: 0,
-        progress: 27000,
-        isPlaying: false,
-        currentAudioTime: '0:00',
-        percentPlayed: 0
-    },
-    auth: {
-        user: null,
-    },
-    user: {
-        recentTracks: [],
-        favTracks: [],
-    },
-    ui: {
-        playerOpen: false,
-    },
-    music: {
-        tracks: [
-            {
-                id: "5de11a305a58b41df485e98a",
-                name: "Ozuna - Dificil Olvidar",
-                audioUrl:
-                    "https://res.cloudinary.com/wlopez/video/upload/v1575033391/vapemusic2/2019/10/Ozuna%20%E2%80%93%20Dif%C3%ADcil%20Olvidar.mp3/gkxjvzeulzhoy9l0mzz8.mp3",
-                imageUrl:
-                    "https://res.cloudinary.com/wlopez/image/upload/v1575033390/vapemusic2/2019/10/Ozuna%20-%20Niviru%20Cover.jpg/Ozuna_-_Niviru_Cover_z7mtjj.jpg",
-                artist: "Ozuna",
-                title: "Dificil De Olvidar",
-                artistList: [],
-                genre: "Reggaeton",
-            },
-            {
-                id: "5e514f8e47f6b853d0439a89",
-                name: "Reik Ft. Farruko &  Camilo - Si Me Dices Que Si",
-                audioUrl:
-                    "https://res.cloudinary.com/wlopez/video/upload/v1582387085/vapemusic2/2020/1/Farruko_-_Si_Me_Dices_Que_Si.mp3",
-                imageUrl:
-                    "https://res.cloudinary.com/wlopez/image/upload/v1582385647/vapemusic2/2020/1/Si_Me_Dices_Que_Si.jpg",
-                artist: "Reik Ft. Farruko &  Camilo",
-                artistList: [],
-                genre: "Reggaeton",
-                title: "Si Me Dices Que Si",
-            },
-            {
-                id: "5e514f8e47f6b853d0439a19",
-                name: "Reik Ft. Farruko &  Camilo - Si Me Dices Que Si",
-                audioUrl:
-                    "https://res.cloudinary.com/wlopez/video/upload/v1582387085/vapemusic2/2020/1/Farruko_-_Si_Me_Dices_Que_Si.mp3",
-                artistList: [],
-                genre: "Reggaeton",
-                title: "Capricornio",
-                artist: "Arcangel",
-                imageUrl: "https://res.cloudinary.com/wlopez/image/upload/v1577401075/vapemusic2/2019/11/Arcangel_-_Historias_de_un_Capricornio_g6p2su.jpg",
-            },
-            {
-                album: "YHLQMDLG",
-                artist: "Bad Bunny",
-                artistList: ["bad bunny"],
-                audioUrl: "https://res.cloudinary.com/wlopez/video/upload/v1583164622/vapemusic2/2020/2/dds4cztgxwdzmtvlgrfl.mp3",
-                createdAt: "2020-03-02T15:57:04.814Z",
-                genre: "Reggaeton",
-                id: "5e5d2cd01d30ca3670e2311b",
-                imageUrl: "https://res.cloudinary.com/wlopez/image/upload/v1583164475/vapemusic2/2020/2/La_Dificil.jpg",
-                name: "Bad Bunny - La Dificil",
-                promoted: true,
-                title: "La Dificil",
-                updatedAt: "2020-03-02T15:57:04.814Z",
-                viewCount: 7,
-            },
-            {
-                album: "Six Feet Apart - Luke Combs (Unreleased, New Song) (Performed at the Grand Ole Opry)",
-                artist: "Luke Combs",
-                artistList: ["luke combs"],
-                audioUrl: "https://res.cloudinary.com/wlopez/video/upload/v1588539413/vapemusic2/2020/4/Six_Feet_Apart_-_Luke_Combs_Unreleased.mp3",
-                createdAt: "2020-05-03T20:56:54.473Z",
-                genre: "pop-r&b",
-                id: "5eaf30166eccb80012ac804e",
-                imageUrl: "https://res.cloudinary.com/wlopez/image/upload/v1588538906/vapemusic2/2020/4/Six_Feet_Apart_Unreleased.jpg",
-                name: "Luke Combs - Six Feet Apart (Unreleased)",
-                promoted: true,
-                title: "Six Feet Apart (Unreleased)",
-                updatedAt: "2020-05-03T20:56:54.473Z",
-                viewCount: 6,
-            }
-        ],
-        hotTracks: ["5de11a305a58b41df485e98a", "5e514f8e47f6b853d0439a19", "5e5d2cd01d30ca3670e2311b"],
-        newTracks: ["5de11a305a58b41df485e98a", "5e514f8e47f6b853d0439a19", "5e5d2cd01d30ca3670e2311b", "5eaf30166eccb80012ac804e"],
-    },
-};
-
+import { Scalars, Maybe } from '../hooks/QueryTypes'
+import { setLocalStorageFaveTracks, setLocalStorageRecentTracks } from './initialState'
 
 export type Song = {
-    id: string,
-    artist: string,
-    title: string,
-    genre: string,
-    album?: string,
-    viewCount?: number,
-    promoted?: boolean,
-    imageUrl: string,
-    audioUrl: string,
-    createdAt?: string,
-    updatedAt?: string,
-    artistList?: Array<string>,
-    name: string,
+    __typename?: "Song";
+    id: Scalars["ID"];
+    artist: Scalars["String"];
+    title: Scalars["String"];
+    genre: Scalars["String"];
+    album?: Maybe<Scalars["String"]>;
+    viewCount?: Maybe<Scalars["Int"]>;
+    promoted?: Maybe<Scalars["Boolean"]>;
+    imageUrl: Scalars["String"];
+    audioUrl: Scalars["String"];
+    createdAt?: Maybe<Scalars["DateTime"]>;
+    updatedAt?: Maybe<Scalars["DateTime"]>;
+    artistList: Array<Scalars["String"]>;
+    name: Scalars["String"];
 };
+
+
+
+
+
+
+
+
+
 
 
 export interface PlayingState {
@@ -123,8 +42,8 @@ export interface AppContextState {
     playing: PlayingState;
     dispatch: React.Dispatch<Actions>;
     user: {
-        favTracks: ITrack[];
-        recentTracks: ITrack[];
+        favTracks: Song[];
+        recentTracks: Song[];
     };
     auth: {
         user: User | null;
@@ -133,7 +52,7 @@ export interface AppContextState {
         playerOpen: boolean;
     };
     music: {
-        tracks: ITrack[];
+        tracks: Song[];
         hotTracks: string[];
         newTracks: string[];
     };
@@ -144,17 +63,8 @@ export interface User {
     email: string;
     id: string;
 }
-export type ITrack = Song
-// export interface ITrack {
-//     id: string;
-//     title: string;
-//     artist: string;
-//     img: string;
-//     time: number;
-// }
-export const AppContext = React.createContext<AppContextState>(
-    {} as AppContextState,
-);
+
+
 
 type SET_PLAYER_OPEN_ACTION = {
     type: "SET_PLAYER_OPEN";
@@ -168,7 +78,7 @@ type PAUSE_ACTION = {
 
 type PLAY_ACTION = {
     type: "PLAY";
-    track: ITrack;
+    track: Song;
 };
 
 type SEEK_ACTION = {
@@ -178,7 +88,7 @@ type SEEK_ACTION = {
 
 type NEXT_ACTION = {
     type: "NEXT";
-    track: ITrack;
+    track: Song;
 };
 
 type PREV_ACTION = {
@@ -187,7 +97,7 @@ type PREV_ACTION = {
 
 type FAV_ACTION = {
     type: "FAV";
-    track: ITrack;
+    track: Song;
 };
 
 type LOGGED_IN_ACTION = {
@@ -210,12 +120,12 @@ type AUDIO_TIME_ACTION = {
 
 type ADD_SONGS_ACTION = {
     type: "ADD_SONGS";
-    payload: ITrack[]
+    payload: Song[]
 };
 
 type ADD_SONGS_IF_NOT_ACTION = {
     type: "ADD_SONGS_IF_NOT";
-    payload: ITrack[]
+    payload: Song[]
 }
 
 export type Actions =
@@ -237,7 +147,7 @@ export interface Action {
 
 export type AppReducer = Reducer<AppContextState, Actions>;
 
-const reducer = (state: AppContextState, action: Actions): AppContextState => {
+export const reducer = (state: AppContextState, action: Actions): AppContextState => {
     const playing = getPlaying(state);
     const ct = getCurrentTrack(state);
     const user = getUser(state);
@@ -278,6 +188,8 @@ const reducer = (state: AppContextState, action: Actions): AppContextState => {
                     index = tracks.length
                     tracks.push(action.track)
                 }
+
+                setLocalStorageRecentTracks([action.track, ...newRecentTracks])
 
                 return {
                     ...state,
@@ -344,11 +256,13 @@ const reducer = (state: AppContextState, action: Actions): AppContextState => {
             const newFavs = getFavTracks(state).filter((t) =>
                 t.id !== action.track.id
             );
+            const favs = !isFav ? [ct, ...newFavs] : newFavs
+            setLocalStorageFaveTracks(favs)
             return {
                 ...state,
                 user: {
                     ...user,
-                    favTracks: !isFav ? [ct, ...newFavs] : newFavs,
+                    favTracks: favs,
                 },
             };
         }
@@ -397,13 +311,17 @@ const reducer = (state: AppContextState, action: Actions): AppContextState => {
             const oldTracks = deepCopy(state.music.tracks)
             const newTracks = action.payload.map(s => s.id)
             const hotTracks = action.payload.filter(s => s.promoted && s.promoted === true).map(s => s.id)
+
+            const uniqueHot = deepCopy([...hotTracks, ...state.music.hotTracks,])
+            const uniqueNew = deepCopy([...newTracks, ...state.music.newTracks,])
+            const uniqueTracks = filterUniqueSongs([...action.payload, ...oldTracks,])
             return {
                 ...state,
                 music: {
                     ...state.music,
-                    tracks: [...action.payload, ...oldTracks,],
-                    newTracks: [...newTracks, ...state.music.newTracks,],
-                    hotTracks: [...hotTracks, ...state.music.hotTracks,]
+                    tracks: uniqueTracks,
+                    newTracks: uniqueNew,
+                    hotTracks: uniqueHot
                 }
             }
         }
@@ -422,51 +340,27 @@ const reducer = (state: AppContextState, action: Actions): AppContextState => {
     }
 };
 
-// const logger = (red: typeof reducer) => {
-//     const reducerWithLogger = (state: AppContextState, action: Actions) => {
-//         console.log(
-//             "%cPrevious State:",
-//             "color: #9E9E9E; font-weight: 700;",
-//             state,
-//         );
-//         console.log("%cAction:", "color: #00A7F7; font-weight: 700;", action);
-//         console.log(
-//             "%cNext State:",
-//             "color: #47B04B; font-weight: 700;",
-//             red(state, action),
-//         );
-//         return red(state, action);
-//     };
 
-//     return reducerWithLogger;
-// };
-
-// const loggerReducer = logger(reducer);
-
-export function AppContextProvider(props: any) {
-    const fullInitialState: AppContextState = {
-        ...initialState,
-    };
-
-    let [state, dispatch] = React.useReducer<AppReducer>(
-        reducer as any,
-        fullInitialState as any,
-    );
-    // let value = { state, dispatch };
-
-    return (
-        <AppContext.Provider
-            value={{
-                ...state,
-                dispatch: dispatch,
-            }}
-        >
-            {props.children}
-        </AppContext.Provider>
-    );
+function filterUniqueSongs(songs: Song[]) {
+    return filterUnique(songs, (every, current) => every.id === current.id)
 }
 
-export const AppContextConsumer = AppContext.Consumer;
+function
+    filterUnique<T extends any>(
+        songs: T[],
+        where: (every: T, current: T) => boolean
+    ) {
+    return songs.reduce((prev, curr) => {
+        if (prev.findIndex((s) => where(s, curr)) !== -1)
+        {
+            return [...prev];
+        }
+        return [...prev, curr];
+    }, [] as T[]);
+
+
+}
+
 
 export const ActionCreators = {
     // Some state action creators
@@ -484,7 +378,7 @@ export const ActionCreators = {
         type: "PAUSE",
     } as PAUSE_ACTION),
 
-    playTrack: (track?: ITrack) => ({
+    playTrack: (track?: Song) => ({
         type: "PLAY",
         track,
     } as PLAY_ACTION),
@@ -503,12 +397,12 @@ export const ActionCreators = {
         payload: percent
     } as PERCENT_PLAYED_ACTION),
 
-    addSongs: (songs: ITrack[]) => ({
+    addSongs: (songs: Song[]) => ({
         type: 'ADD_SONGS',
         payload: songs
     } as ADD_SONGS_ACTION),
 
-    addSongsIfNotExist: (songs: ITrack[]) => ({
+    addSongsIfNotExist: (songs: Song[]) => ({
         type: 'ADD_SONGS_IF_NOT',
         payload: songs
     } as ADD_SONGS_IF_NOT_ACTION),
@@ -522,7 +416,7 @@ export const ActionCreators = {
         type: "PREV",
     } as PREV_ACTION),
 
-    favTrack: (track: ITrack) => ({
+    favTrack: (track: Song) => ({
         type: "FAV",
         track,
     } as FAV_ACTION),
@@ -542,19 +436,23 @@ export const isPlayerOpen = (state: AppContextState) => state.ui.playerOpen;
 
 // Get all tracks in database
 export const getTracks = (state: AppContextState) => state.music.tracks;
+
 export const getNewTracks = (state: AppContextState) =>
     state.music.tracks.filter((t) =>
         state.music.newTracks.find((nt) => nt === t.id)
     );
+
 export const getHotTracks = (state: AppContextState) =>
     state.music.tracks.filter((t) =>
         state.music.hotTracks.find((nt) => nt === t.id)
     );
 
 export const getFavTracks = (state: AppContextState) => state.user.favTracks;
+
 export const getRecentTracks = (state: AppContextState) =>
     state.user.recentTracks;
-export const isFavTrack = (state: AppContextState, track: ITrack) =>
+
+export const isFavTrack = (state: AppContextState, track: Song) =>
     !!state.user.favTracks.find((t) => t.id === track.id);
 
 export const getPlaying = (state: AppContextState) => state.playing;
@@ -564,12 +462,10 @@ export const getCurrentTrack = (state: AppContextState) =>
 
 export const getTrack = (state: AppContextState, id: string) =>
     state.music.tracks.find((t) => t.id === id);
+
 export const getTrackIndex = (state: AppContextState, id: string) =>
     state.music.tracks.findIndex((t) => t.id === id);
+
 export const getUser = (state: AppContextState) => state.user;
 
 
-export const useAppState = () => {
-    const state = React.useContext(AppContext)
-    return [state, state.dispatch, ActionCreators] as const
-}

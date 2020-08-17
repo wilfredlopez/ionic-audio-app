@@ -7,7 +7,7 @@ import {
 } from "@ionic/react";
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
-import { resetPassword } from "../auth";
+import { fakeResetPassword } from "../auth";
 import "./Form.css";
 
 
@@ -22,7 +22,7 @@ export const ResetPassword = () => {
 
         try
         {
-            await resetPassword(email);
+            await fakeResetPassword(email);
             setEmail("");
             alert("Password reset email sent");
         } catch (e)
@@ -34,7 +34,7 @@ export const ResetPassword = () => {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar color="light">
+                <IonToolbar >
                     <IonButtons slot="start">
                         <IonBackButton defaultHref={`/`} />
                     </IonButtons>

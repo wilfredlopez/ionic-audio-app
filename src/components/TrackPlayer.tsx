@@ -1,4 +1,4 @@
-import React, { useCallback, useContext } from "react";
+import React, { useCallback } from "react";
 
 import {
     IonModal,
@@ -24,16 +24,16 @@ import {
 } from "ionicons/icons";
 
 import {
-    AppContext,
     isPlayerOpen,
     ActionCreators,
     getCurrentTrack,
     isFavTrack,
-    ITrack,
-} from "../State";
+    Song,
+} from "../appState/State";
 
 import useAudioControls from '../hooks/useAudioControls'
 import "./TrackPlayer.css";
+import { useAppState } from "src/appState/AppContextProvider";
 
 interface TrackProgressProps {
     currentAudioTime: string
@@ -70,7 +70,7 @@ const TrackProgress = ({ onSeek, percentPlayed, currentAudioTime }: TrackProgres
 
 interface TrackControlProps {
     isPlaying: boolean
-    track?: ITrack
+    track?: Song
     isFav?: boolean
     onPause: () => void
     onPlay: () => void
@@ -100,7 +100,7 @@ const TrackControls = (
 };
 
 interface TrackPlayerProps {
-    track?: ITrack
+    track?: Song
     closed?: boolean
 }
 
@@ -110,7 +110,7 @@ function turnSecondsToMinutes(s: number) {
 
 
 const TrackPlayer = (_props: TrackPlayerProps) => {
-    const state = useContext(AppContext);
+    const [state] = useAppState()
     const dispatch = state.dispatch
     const { isPlaying } = state.playing
     const handleClose = useCallback(() => {

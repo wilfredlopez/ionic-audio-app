@@ -15,7 +15,6 @@ import {
 
 import {
   home,
-
   informationCircle,
   person,
   search,
@@ -37,7 +36,9 @@ const Tabs = () => {
         <TrackPreview />
       </TabBarSticky>
       <IonTabs>
+
         <IonRouterOutlet>
+
           <Route path="/app/browse" component={Music} exact={true} />
           <Route path="/app/track/:trackId" component={Track} />
           <Route path="/app/search" component={Search} exact={true} />
@@ -66,7 +67,7 @@ const Tabs = () => {
           </IonTabButton>
           <IonTabButton tab="readme" href="/app/readme">
             <IonIcon icon={informationCircle} />
-            <IonLabel>README</IonLabel>
+            <IonLabel>About</IonLabel>
           </IonTabButton>
         </IonTabBar>
       </IonTabs>

@@ -6,10 +6,10 @@ import {
     IonLabel, IonList,
     IonLoading, IonPage, IonTitle, IonToolbar
 } from "@ionic/react";
-import React, { useContext, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useHistory } from "react-router";
-import { signup } from "../auth";
-import { AppContext, ActionCreators } from "../State";
+import { useAppState } from "src/appState/AppContextProvider";
+import { fakeSignup } from "../auth";
 import urls from "../urls";
 import "./Form.css";
 
@@ -20,7 +20,7 @@ import "./Form.css";
 
 
 const Signup = () => {
-    const { dispatch } = useContext(AppContext);
+    const [, dispatch, ActionCreators] = useAppState()
     const history = useHistory()
     const [email, setEmail] = useState("");
     const [name, setName] = useState("");
@@ -42,7 +42,7 @@ const Signup = () => {
         {
             setShowLoading(true);
 
-            const user = await signup(email, password);
+            const user = await fakeSignup(email, password);
 
             dispatch(ActionCreators.loggedIn(user));
 
@@ -60,7 +60,7 @@ const Signup = () => {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar color="light">
+                <IonToolbar>
                     <IonButtons slot="start">
                         <IonBackButton defaultHref={`/`} />
                     </IonButtons>

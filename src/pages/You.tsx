@@ -8,21 +8,21 @@ import {
     IonToolbar
 } from "@ionic/react";
 import { ellipsisVertical, removeCircleOutline } from "ionicons/icons";
-import React, { useCallback, useContext, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { useHistory } from "react-router";
+import { useAppState } from "src/appState/AppContextProvider";
+import { Logo } from "src/components/Logo";
 import {
-    AppContext,
-    getFavTracks, getRecentTracks, ITrack, ActionCreators
-} from "../State";
+    getFavTracks, getRecentTracks, Song, ActionCreators
+} from "../appState/State";
 import urls from "../urls";
-import { img } from "../util";
+import { img } from "../utils/util";
 
 
 
 const You = () => {
     const history = useHistory();
-    const state = useContext(AppContext);
-    const dispatch = state.dispatch;
+    const [state, dispatch] = useAppState()
 
     const [showUserMenuEvent, setShowUserMenuEvent] = useState<React.MouseEvent<HTMLIonButtonElement, MouseEvent> | undefined>(
         undefined,
@@ -30,7 +30,7 @@ const You = () => {
     const recentTracks = getRecentTracks(state);
     const favTracks = getFavTracks(state);
 
-    const doPlay = useCallback((track: ITrack) => {
+    const doPlay = useCallback((track: Song) => {
         dispatch(ActionCreators.playTrack(track));
     }, [dispatch]);
 
@@ -46,6 +46,9 @@ const You = () => {
         <IonPage>
             <IonHeader>
                 <IonToolbar>
+                    <IonButtons slot="start">
+                        <Logo />
+                    </IonButtons>
                     <IonTitle>Your Library</IonTitle>
                     <IonButtons slot="end">
                         <IonButton

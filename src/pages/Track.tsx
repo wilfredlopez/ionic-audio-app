@@ -11,10 +11,10 @@ import {
     IonModal, IonTitle, IonToolbar
 } from "@ionic/react";
 import React from "react";
-import { ITrack } from "src/State";
+import { Song } from "src/appState/State";
 
 interface TrackProps {
-    track: ITrack
+    track: Song
 }
 
 const Track = ({ track }: TrackProps) => {

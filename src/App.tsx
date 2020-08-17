@@ -1,10 +1,5 @@
 import {
   IonApp,
-
-
-
-
-
   IonPage, IonRouterOutlet
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -16,16 +11,11 @@ import { useGetAllSongsQuery } from './hooks/useGetSongsQuery';
 import Login from './pages/Login';
 import ResetPassword from './pages/ResetPassword';
 import Signup from './pages/Signup';
-import { useAppState } from './State';
+import { useAppState } from './appState/AppContextProvider';
 import Tabs from './Tabs';
 /* Theme variables */
 import './theme/variables.css';
 import urls from './urls';
-
-
-
-
-
 
 
 
@@ -56,7 +46,6 @@ const App = () => {
             <Route exact={true} path="/" render={() => <Redirect to={urls.APP_HOME} />} />
           </IonRouterOutlet>
           <Route path="/app" component={Tabs} />
-          {/* <Audio /> */}
           <TrackPlayer />
         </IonPage>
       </IonReactRouter>

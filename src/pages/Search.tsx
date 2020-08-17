@@ -11,21 +11,21 @@ import {
     IonToolbar,
     useIonViewDidEnter
 } from "@ionic/react";
-import React, { useCallback, useContext, useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
+import { useAppState } from "src/appState/AppContextProvider";
 import { useSearchSongsLazyQuery } from "src/hooks/useSearchSongsQuery";
 // import { search } from "../search";
-import { AppContext, ITrack, ActionCreators } from "../State";
-import { img, debounce } from "../util";
+import { Song, ActionCreators } from "../appState/State";
+import { img, debounce } from "../utils/util";
 
 
 
 
 const Search = () => {
-    const state = useContext(AppContext);
-    const dispatch = state.dispatch
+    const [, dispatch] = useAppState()
 
     // const [isSearching, setIsSearching] = useState(false);
-    const [tracks, setTracks] = useState<ITrack[]>([]);
+    const [tracks, setTracks] = useState<Song[]>([]);
     const searchbarRef = useRef<HTMLIonSearchbarElement>(null);
 
 
@@ -34,7 +34,7 @@ const Search = () => {
             if (completeQuery.searchSongs.songs)
             {
                 // ActionCreators.addSongsIfNotExist(completeQuery.searchSongs.songs as ITrack[])
-                setTracks(completeQuery.searchSongs.songs as ITrack[])
+                setTracks(completeQuery.searchSongs.songs as Song[])
             }
         }
     })

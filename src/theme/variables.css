@@ -1,12 +1,14 @@
 :root {
     /* color-scheme: light dark; */
     --ion-font-family: 'Baloo Tamma 2', cursive;
-    --ion-color-primary: #c85b6b;
-    --ion-color-primary-rgb: 254, 40, 81;
-    --ion-color-primary-contrast: #ffffff;
-    --ion-color-primary-contrast-rgb: 255, 255, 255;
-    --ion-color-primary-shade: #b0505e;
-    --ion-color-primary-tint: #ce6b7a;
+    
+    --ion-color-primary: #fa4d4d;
+    --ion-color-primary-rgb: 250,77,77;
+    --ion-color-primary-contrast: #fff;
+    --ion-color-primary-contrast-rgb: 255,255,255;
+    --ion-color-primary-shade: #dc4444;
+    --ion-color-primary-tint: #fb5f5f;
+
   
     --ion-color-secondary: #5ac8fa;
     --ion-color-secondary-rgb: 90, 200, 250;
