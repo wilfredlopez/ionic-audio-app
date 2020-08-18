@@ -1,8 +1,9 @@
 import {
     IonButtons,
-    IonContent, IonHeader,
+    IonCol,
+    IonContent, IonGrid, IonHeader,
     IonPage,
-
+    IonRow,
     IonTitle, IonToolbar
 } from "@ionic/react";
 import React from "react";
@@ -22,6 +23,24 @@ const Readme = () => {
                 </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">
+                <IonGrid>
+                    <IonRow>
+                        <IonCol size="12">
+                            <IonTitle className="flex-center" >
+                                {APP_TITLE}
+                            </IonTitle>
+                        </IonCol>
+                    </IonRow>
+                    <IonRow>
+                        <IonCol sizeXs={'12'}>
+                            <div className="flex-center">
+
+                                <Logo width={100} fill="var(--ion-color-primary, red)" />
+                            </div>
+                        </IonCol>
+                    </IonRow>
+
+                </IonGrid>
                 <p>
                     <b>
                         Disclaimer:{" "}

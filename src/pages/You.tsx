@@ -16,7 +16,6 @@ import {
     getFavTracks, getRecentTracks, Song, ActionCreators
 } from "../appState/State";
 import urls from "../urls";
-import { img } from "../utils/util";
 
 
 
@@ -91,7 +90,7 @@ const You = () => {
                     {recentTracks.map((track) => (
                         <IonItem key={track.id + "-RecentTracks"} onClick={() => doPlay(track)} button>
                             <IonThumbnail slot="start">
-                                <img src={img(track.imageUrl)} alt={track.title} />
+                                <img src={track.imageUrl} alt={track.title} />
                             </IonThumbnail>
                             <IonLabel>
                                 <h2>{track.title}</h2>
@@ -108,7 +107,7 @@ const You = () => {
                     {favTracks.map((track) => (
                         <IonItem key={track.id + "-FavTracks"} onClick={() => doPlay(track)} button>
                             <IonThumbnail slot="start">
-                                <img src={img(track.imageUrl)} alt={track.title} />
+                                <img src={track.imageUrl} alt={track.title} />
                             </IonThumbnail>
                             <IonLabel>
                                 <h2>{track.title}</h2>

@@ -1985,10 +1985,10 @@
     "@webassemblyjs/wast-parser" "1.8.5"
     "@xtuc/long" "4.2.2"
 
-"@wilfredlopez/react-utils@^1.0.9":
-  version "1.0.9"
-  resolved "https://registry.yarnpkg.com/@wilfredlopez/react-utils/-/react-utils-1.0.9.tgz#7a15f1fec0ab7cb2f7eb705230f7965ffb2bb326"
-  integrity sha512-Ka1Vo7/FGdRxHCm3PoOLZ+hERfwb7mg5FEmbw5XQlzKw+dL0n/0DkZhSasmA+egFIQys6ejfAEOkOIE5LyZOSA==
+"@wilfredlopez/react-utils@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@wilfredlopez/react-utils/-/react-utils-2.0.0.tgz#510a940f1721e0aa6e6025894087fe040639ecdc"
+  integrity sha512-4tuThxdGTh3pxy3i2O7lzQLBsu7jksq4dI7Cs5z+jAOFHg8aV/UAyLG0RkizCMuJIovx/uzTMmSv4lD0vIoJdA==
   dependencies:
     "@babel/core" "^7.0.0"
     "@babel/plugin-proposal-decorators" "^7.10.5"

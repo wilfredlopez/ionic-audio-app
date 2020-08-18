@@ -1,5 +1,5 @@
 import React, { Reducer } from "react";
-import { assertNever, deepCopy } from '@wilfredlopez/react-utils/dist'
+import { assertNever, deepCopy } from '@wilfredlopez/react-utils'
 import { Scalars, Maybe } from '../hooks/QueryTypes'
 import { setLocalStorageFaveTracks, setLocalStorageRecentTracks } from './initialState'
 

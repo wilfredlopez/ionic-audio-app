@@ -1,22 +1,22 @@
 import {
     IonButtons,
-    IonCol, IonContent,
+    IonContent,
     IonGrid, IonHeader,
-    IonItem,
     IonLabel, IonList,
     IonListHeader, IonPage,
-    IonRow, IonThumbnail, IonTitle, IonToolbar
+    IonRow, IonTitle, IonToolbar
 } from "@ionic/react";
 import React, { useCallback } from "react";
 import { useAppState } from "src/appState/AppContextProvider";
 import { ContentGrid } from "src/components/ContentGrid";
-import { APP_TITLE } from "src/constants";
-
-import { getHotTracks, getNewTracks, ActionCreators } from "../appState/State";
-import { img } from "../utils/util";
-
-import "./Home.css";
+import HotTrack from "src/components/HotTrack";
 import { Logo } from "src/components/Logo";
+import NewTrack from "src/components/NewTrack";
+import { APP_TITLE } from "src/constants";
+import { ActionCreators, getHotTracks, getNewTracks } from "../appState/State";
+import "./Home.css";
+
+
 
 const Home = () => {
     const [state, dispatch] = useAppState()
@@ -27,8 +27,6 @@ const Home = () => {
     const doPlay = useCallback((track) => {
         dispatch(ActionCreators.playTrack(track));
     }, [dispatch]);
-
-
 
     return (
         <IonPage>
@@ -49,15 +47,9 @@ const Home = () => {
                             <IonLabel>Hot Tracks</IonLabel>
                         </IonListHeader>
                         {hotTracks.map((track) => (
-                            <IonItem key={track.id + '-hottracks'} onClick={() => doPlay(track)} button>
-                                <IonThumbnail slot="start">
-                                    <img src={img(track.imageUrl)} alt={track.title} />
-                                </IonThumbnail>
-                                <IonLabel>
-                                    <h2>{track.title}</h2>
-                                    <p>{track.artist}</p>
-                                </IonLabel>
-                            </IonItem>
+                            <HotTrack key={track.id + '-hottracks'}
+                                track={track}
+                                handlePlay={doPlay} />
                         ))}
                     </IonList>
 
@@ -68,20 +60,12 @@ const Home = () => {
                         <IonGrid>
                             <IonRow>
                                 {newTracks.map((track) => (
-                                    <IonCol
-                                        size={'6'}
-                                        className="new-track"
+                                    <NewTrack
                                         key={track.id + "-NewTracks"}
-                                        onClick={() => doPlay(track)}
-                                    >
-                                        <img src={track.imageUrl} alt={track.title} />
-                                        <IonItem lines="none">
-                                            <IonLabel>
-                                                <h3>{track.title}</h3>
-                                                <p>{track.artist}</p>
-                                            </IonLabel>
-                                        </IonItem>
-                                    </IonCol>
+                                        track={track}
+                                        handlePlay={doPlay}
+                                    />
+
                                 ))}
                             </IonRow>
                         </IonGrid>
@@ -93,4 +77,4 @@ const Home = () => {
     );
 };
 
-export default Home;
+export default React.memo(Home);

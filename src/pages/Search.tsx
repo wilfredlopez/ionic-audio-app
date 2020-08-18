@@ -16,7 +16,7 @@ import { useAppState } from "src/appState/AppContextProvider";
 import { useSearchSongsLazyQuery } from "src/hooks/useSearchSongsQuery";
 // import { search } from "../search";
 import { Song, ActionCreators } from "../appState/State";
-import { img, debounce } from "../utils/util";
+import { debounce } from '@wilfredlopez/react-utils'
 
 
 
@@ -91,7 +91,7 @@ const Search = () => {
                 {tracks.map((track) => (
                     <IonItem key={track.id + '-tracks'} onClick={() => doPlay(track)} button>
                         <IonThumbnail slot="start">
-                            <img src={img(track.imageUrl)} alt={track.title} />
+                            <img src={track.imageUrl} alt={track.title} />
                         </IonThumbnail>
                         <IonLabel>
                             <h2>{track.title}</h2>

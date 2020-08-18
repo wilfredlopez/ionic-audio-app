@@ -11,7 +11,7 @@ import {
     PlayingState,
     ActionCreators
 } from "../appState/State";
-import { StringHelper } from '@wilfredlopez/react-utils/dist'
+import { StringHelper } from '@wilfredlopez/react-utils'
 import "./TrackPreview.css";
 
 interface TrackProps {
