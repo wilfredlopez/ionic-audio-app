@@ -24,7 +24,7 @@ import Music from "./pages/Home";
 import Search from "./pages/Search";
 import You from "./pages/You";
 import Track from "./pages/Track";
-import Readme from "./pages/Readme";
+import About from "./pages/About";
 
 import TabBarSticky from "./components/TabBarSticky";
 import TrackPreview from "./components/TrackPreview";
@@ -44,7 +44,7 @@ const Tabs = () => {
           <Route path="/app/search" component={Search} exact={true} />
           <Route path="/app/search/track/:trackId" component={Track} />
           <Route path="/app/account" component={You} />
-          <Route path="/app/readme" component={Readme} />
+          <Route path="/app/readme" component={About} />
           <Route
             path="/app/"
             render={() => <Redirect to="/app/browse" />}

@@ -1,4 +1,4 @@
-export const APP_TITLE = "XY-Music";
+export const APP_TITLE = "XYMusic";
 export const ACCESS_TOKEN = "xvapetoken";
 export const REFRESH_TOKEN = "xvaperefreshtoken";
 export const CONTACT_EMAIL = "cubamc@gmail.com";

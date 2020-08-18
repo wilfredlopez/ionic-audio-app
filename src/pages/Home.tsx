@@ -1,5 +1,7 @@
 import {
+    IonButton,
     IonButtons,
+    IonCol,
     IonContent,
     IonGrid, IonHeader,
     IonLabel, IonList,
@@ -13,20 +15,28 @@ import HotTrack from "src/components/HotTrack";
 import { Logo } from "src/components/Logo";
 import NewTrack from "src/components/NewTrack";
 import { APP_TITLE } from "src/constants";
-import { ActionCreators, getHotTracks, getNewTracks } from "../appState/State";
+import { getHotTracks, getNewTracks } from "../appState/State";
 import "./Home.css";
 
+import { useGetAllSongsLazyQuery } from "src/hooks/useGetSongsQuery";
 
 
 const Home = () => {
-    const [state, dispatch] = useAppState()
+    const [state, dispatch, ActionCreators] = useAppState()
 
     const hotTracks = getHotTracks(state);
     const newTracks = getNewTracks(state);
-
+    const [loadMoreSongs, { loading }] = useGetAllSongsLazyQuery({
+        onCompleted: ({ getAllSongs }) => {
+            if (getAllSongs.songs)
+            {
+                dispatch(ActionCreators.addSongsIfNotExist(getAllSongs.songs))
+            }
+        }
+    })
     const doPlay = useCallback((track) => {
         dispatch(ActionCreators.playTrack(track));
-    }, [dispatch]);
+    }, [dispatch, ActionCreators]);
 
     return (
         <IonPage>
@@ -70,6 +80,28 @@ const Home = () => {
                             </IonRow>
                         </IonGrid>
                     </IonList>
+                    <IonGrid >
+                        <IonRow className="ion-justify-content-center">
+                            <IonCol size="auto" >
+                                <IonButton
+                                    shape="round"
+                                    fill="outline"
+                                    disabled={loading}
+                                    onClick={() => {
+                                        loadMoreSongs({
+                                            variables: {
+                                                limit: state.music.tracks.length + 20,
+                                                skip: state.music.tracks.length - 1
+                                            }
+                                        })
+                                    }}
+                                >
+                                    Load More
+                                    </IonButton>
+
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
 
                 </ContentGrid>
             </IonContent>

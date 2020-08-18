@@ -10,7 +10,7 @@ import React from "react";
 import { Logo } from "src/components/Logo";
 import { APP_TITLE, CONTACT_EMAIL } from "src/constants";
 
-const Readme = () => {
+const About = () => {
     return (
         <IonPage>
             <IonHeader>
@@ -26,13 +26,13 @@ const Readme = () => {
                 <IonGrid>
                     <IonRow>
                         <IonCol size="12">
-                            <IonTitle className="flex-center" >
+                            <IonTitle className="flex-center text-center" >
                                 {APP_TITLE}
                             </IonTitle>
                         </IonCol>
                     </IonRow>
                     <IonRow>
-                        <IonCol sizeXs={'12'}>
+                        <IonCol size={'12'}>
                             <div className="flex-center">
 
                                 <Logo width={100} fill="var(--ion-color-primary, red)" />
@@ -67,4 +67,4 @@ const Readme = () => {
     );
 };
 
-export default Readme;
+export default About;

@@ -37,7 +37,10 @@ export const AppContextConsumer = AppContext.Consumer;
 
 export const useAppState = () => {
     const state = React.useContext(AppContext)
-    return [state, state.dispatch, ActionCreators] as const
+    const actions = React.useMemo(() => {
+        return ActionCreators
+    }, [])
+    return [state, state.dispatch, actions] as const
 }
 
 

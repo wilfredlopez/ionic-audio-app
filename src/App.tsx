@@ -1,5 +1,6 @@
 import {
   IonApp,
+  IonLoading,
   IonPage, IonRouterOutlet
 } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
@@ -16,20 +17,26 @@ import Tabs from './Tabs';
 /* Theme variables */
 import './theme/variables.css';
 import urls from './urls';
+import { Song } from './appState/State';
 
+
+const cache: { [key: number]: Song[] } = {}
 
 const App = () => {
-  const { data } = useGetAllSongsQuery({
+  const { data, loading } = useGetAllSongsQuery({
+    fetchPolicy: 'cache-first',
     variables: {
-      limit: 31
-    }
+      limit: 31,
+    },
   })
   const [, dispatch, Actions] = useAppState()
 
 
   React.useLayoutEffect(() => {
-    if (data?.getAllSongs && data.getAllSongs.songs.length > 0)
+
+    if (!cache[0] && data?.getAllSongs && data.getAllSongs.songs.length > 0)
     {
+      cache[0] = data.getAllSongs.songs
       dispatch(Actions.addSongs(data.getAllSongs.songs as any))
     }
     //eslint-disable-next-line
@@ -39,6 +46,11 @@ const App = () => {
     <IonApp>
       <IonReactRouter>
         <IonPage>
+          <IonLoading
+            isOpen={loading}
+            showBackdrop={true}
+            spinner="crescent"
+          />
           <IonRouterOutlet>
             <Route path={urls.LOGIN} component={Login} exact={true} />
             <Route path={urls.SIGNUP} component={Signup} exact={true} />

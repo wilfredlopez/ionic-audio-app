@@ -16,3 +16,7 @@ img{
   justify-content: center;
   display: flex;
 }
+
+.text-center{
+  text-align: center;
+}

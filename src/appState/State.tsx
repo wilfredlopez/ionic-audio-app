@@ -309,7 +309,6 @@ export const reducer = (state: AppContextState, action: Actions): AppContextStat
             return {
                 ...state,
                 music: {
-                    ...state.music,
                     tracks: uniqueTracks,
                     newTracks: uniqueNew,
                     hotTracks: uniqueHot
@@ -317,11 +316,18 @@ export const reducer = (state: AppContextState, action: Actions): AppContextStat
             }
         }
         case "ADD_SONGS_IF_NOT": {
+            const unique = filterUniqueSongs([...state.music.tracks, ...action.payload,])
+            const songsIds = getSongIds(action.payload)
+            const newTracks = filterUniqueIds([...state.music.newTracks, ...songsIds])
+            const hotTracks = action.payload.filter(s => s.promoted && s.promoted === true).map(s => s.id)
+
+            const uniqueHot = filterUniqueIds([...hotTracks, ...state.music.hotTracks])
             return {
                 ...state,
                 music: {
-                    ...state.music,
-                    tracks: [...action.payload, ...state.music.tracks,],
+                    tracks: unique,
+                    newTracks: newTracks,
+                    hotTracks: uniqueHot,
                 }
             }
         }
@@ -331,6 +337,14 @@ export const reducer = (state: AppContextState, action: Actions): AppContextStat
     }
 };
 
+
+function getSongIds(songs: Song[]) {
+    return songs.map(song => song.id)
+}
+
+function filterUniqueIds(songIds: string[]) {
+    return filterUnique(songIds, (every, current) => every === current)
+}
 
 function filterUniqueSongs(songs: Song[]) {
     return filterUnique(songs, (every, current) => every.id === current.id)
