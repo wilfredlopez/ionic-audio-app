@@ -21,15 +21,6 @@ export type Song = {
 };
 
 
-
-
-
-
-
-
-
-
-
 export interface PlayingState {
     index: number;
     isPlaying: boolean;

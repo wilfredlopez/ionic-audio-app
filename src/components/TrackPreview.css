@@ -50,10 +50,16 @@
     align-items: center;
    
   }
-
+.min-height-100{
+  min-height: 100px;
+}
   .track-controls-full{
     /* background: var(--ion-color-secondary, cadetblue); */
     border-radius: 3px;
+    /* bottom: 45px;
+    position: absolute;
+    right: 0;
+    left: 0px; */
   }
   
   .track-controls ion-icon {

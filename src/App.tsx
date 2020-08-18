@@ -23,7 +23,7 @@ import urls from './urls';
 const App = () => {
   const { data } = useGetAllSongsQuery({
     variables: {
-      limit: 20
+      limit: 25
     }
   })
   const [, dispatch, Actions] = useAppState()

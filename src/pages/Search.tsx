@@ -80,7 +80,11 @@ const Search = () => {
                     <IonTitle>Search</IonTitle>
                 </IonToolbar>
                 <IonToolbar>
-                    <IonSearchbar color="primary" ref={searchbarRef} onIonChange={doSearch} />
+                    <IonSearchbar
+                        color="primary"
+                        placeholder="Song Name, Artist or album"
+                        ref={searchbarRef}
+                        onIonChange={doSearch} />
                 </IonToolbar>
             </IonHeader>
             <IonContent>

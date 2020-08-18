@@ -10,6 +10,7 @@ import {
     IonButtons,
     IonButton,
     IonIcon,
+    IonGrid, IonRow, IonCol
 } from "@ionic/react";
 
 import {
@@ -37,11 +38,12 @@ import { useAppState } from "src/appState/AppContextProvider";
 
 interface TrackProgressProps {
     currentAudioTime: string
+    currentAudioTimeLeft: string
     percentPlayed: number
     onSeek: (time: number) => void
 }
 
-const TrackProgress = ({ onSeek, percentPlayed, currentAudioTime }: TrackProgressProps) => {
+const TrackProgressFull = ({ onSeek, percentPlayed, currentAudioTime, currentAudioTimeLeft }: TrackProgressProps) => {
 
     return (
         <div className="track-progress">
@@ -61,12 +63,18 @@ const TrackProgress = ({ onSeek, percentPlayed, currentAudioTime }: TrackProgres
                     {/* {msToTime(time)} */}
                 </div>
                 <div className="track-progress-time-left">
+                    {currentAudioTimeLeft}
                     {/* -{msToTime(left)} */}
                 </div>
             </div>
         </div>
     );
 };
+
+const IconStyle = {
+    flex: "1 1",
+    alignSelf: "flex-end"
+}
 
 interface TrackControlProps {
     isPlaying: boolean
@@ -84,17 +92,29 @@ const TrackControls = (
 ) => {
     return (
         <div className="track-controls track-controls-full">
-            <IonIcon onClick={onFav} icon={isFav ? heart : heartOutline} />
-            <IonIcon onClick={onPrev} icon={playSkipBack} />
+            <IonIcon
+                style={IconStyle}
+                onClick={onFav} icon={isFav ? heart : heartOutline} />
+            <IonIcon style={IconStyle} onClick={onPrev} icon={playSkipBack} />
             {!isPlaying
                 ? (
-                    <IonIcon onClick={onPlay} className="play-pause" icon={play} />
+                    <IonIcon onClick={onPlay}
+                        style={{
+                            ...IconStyle,
+                            transform: "translate(0px, 10px)"
+                        }}
+                        className="play-pause" icon={play} />
                 )
                 : (
-                    <IonIcon onClick={onPause} className="play-pause" icon={pause} />
+                    <IonIcon
+                        style={{
+                            ...IconStyle,
+                            transform: "translate(0px, 10px)"
+                        }}
+                        onClick={onPause} className="play-pause" icon={pause} />
                 )}
-            <IonIcon onClick={onNext} icon={playSkipForward} />
-            <IonIcon icon={removeCircleOutline} />
+            <IonIcon onClick={onNext} style={IconStyle} icon={playSkipForward} />
+            <IonIcon style={IconStyle} icon={removeCircleOutline} />
         </div>
     );
 };
@@ -102,10 +122,6 @@ const TrackControls = (
 interface TrackPlayerProps {
     track?: Song
     closed?: boolean
-}
-
-function turnSecondsToMinutes(s: number) {
-    return (s - (s %= 60)) / 60 + (9 < Math.round(s) ? ":" : ":0") + Math.round(s)
 }
 
 
@@ -118,7 +134,7 @@ const TrackPlayer = (_props: TrackPlayerProps) => {
     }, [dispatch]);
 
     // const [muted, setMuted] = React.useState(false);
-    const currentAudioTimeRef = React.useRef("0");
+    // const currentAudioTimeRef = React.useRef("0");
 
     // function toggleMute() {
     //     if (muted)
@@ -146,7 +162,7 @@ const TrackPlayer = (_props: TrackPlayerProps) => {
     const open = isPlayerOpen(state);
     const track = getCurrentTrack(state);
     const isFav = isFavTrack(state, track);
-    const [{ audio, controls, state: audioState }] = useAudioControls({
+    const [{ audio, controls, state: audioState, currentAudioTimeRef, currentAudioTimeLeftRef, ref }] = useAudioControls({
         src: track.audioUrl,
         autoPlay: false,
         loop: false,
@@ -172,15 +188,41 @@ const TrackPlayer = (_props: TrackPlayerProps) => {
         //eslint-disable-next-line
     }, [isPlaying, track])
 
+
+    function playPrev() {
+        dispatch(ActionCreators.prevTrack())
+    }
+
+    const playNext = React.useCallback(() => {
+        dispatch(ActionCreators.nextTrack())
+        //eslint-disable-next-line
+    }, []);
+
+
     React.useLayoutEffect(() => {
         if (currentAudioTimeRef)
         {
-            let totalPercent = turnSecondsToMinutes(audioState.time);
-            currentAudioTimeRef.current = totalPercent;
-            dispatch(ActionCreators.setCurrentAudioTime(totalPercent))
+            dispatch(ActionCreators.setCurrentAudioTime(currentAudioTimeRef.current))
         }
         //eslint-disable-next-line
     }, [audioState.time]);
+
+
+    //Playnext track when audio ends.
+    React.useLayoutEffect(() => {
+        if (ref)
+        {
+            const theref = ref;
+            if (theref && theref.current && theref.current.currentTime)
+            {
+                if (theref.current.currentTime === audioState.duration)
+                {
+                    playNext();
+                }
+            }
+        }
+    }, [playNext, audioState.duration, ref]);
+
 
 
     function handleSeek(seekTo: number) {
@@ -201,6 +243,8 @@ const TrackPlayer = (_props: TrackPlayerProps) => {
     //         };
     //         //eslint-disable-next-line
     // }, [ playing, controls]);
+
+
 
 
     return (
@@ -224,27 +268,35 @@ const TrackPlayer = (_props: TrackPlayerProps) => {
                         </IonTitle>
                     </IonToolbar>
                 </IonHeader>
-                <IonContent className="track-content">
-                    <img src={track.imageUrl} alt={track.title} />
-                    <h2>{track.title}</h2>
-                    <h4>{track.artist}</h4>
-                    <TrackProgress
-                        percentPlayed={audioState.percentPlayed}
-                        currentAudioTime={currentAudioTimeRef.current}
-                        onSeek={(n: number) => handleSeek(n)}
-                    />
-                    <TrackControls
-                        isPlaying={isPlaying}
-                        track={track}
-                        isFav={isFav}
-                        onPause={() => {
-                            handleTogglePlaying()
-                        }}
-                        onPlay={() => handleTogglePlaying()}
-                        onPrev={() => dispatch(ActionCreators.prevTrack())}
-                        onNext={() => dispatch(ActionCreators.nextTrack())}
-                        onFav={() => dispatch(ActionCreators.favTrack(track))}
-                    />
+                <IonContent className="track-content min-height-100">
+                    <IonGrid>
+                        <IonRow>
+                            <IonCol>
+
+                                <img src={track.imageUrl} alt={track.title} />
+                                <h2>{track.title}</h2>
+                                <h4>{track.artist}</h4>
+                                <TrackProgressFull
+                                    percentPlayed={audioState.percentPlayed}
+                                    currentAudioTime={currentAudioTimeRef.current}
+                                    currentAudioTimeLeft={currentAudioTimeLeftRef.current}
+                                    onSeek={(n: number) => handleSeek(n)}
+                                />
+                                <TrackControls
+                                    isPlaying={isPlaying}
+                                    track={track}
+                                    isFav={isFav}
+                                    onPause={() => {
+                                        handleTogglePlaying()
+                                    }}
+                                    onPlay={() => handleTogglePlaying()}
+                                    onPrev={() => playPrev()}
+                                    onNext={() => playNext()}
+                                    onFav={() => dispatch(ActionCreators.favTrack(track))}
+                                />
+                            </IonCol>
+                        </IonRow>
+                    </IonGrid>
                 </IonContent>
             </IonModal>
         </React.Fragment>
