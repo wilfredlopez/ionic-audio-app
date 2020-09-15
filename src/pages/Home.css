@@ -1,3 +1,4 @@
 .new-track {
     cursor: pointer;
+    align-self: flex-end;
   }
