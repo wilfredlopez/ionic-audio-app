@@ -1,49 +1,50 @@
 import React from 'react'
-import {
-    AppContextState, AppReducer, reducer,
-    // Actions
-    ActionCreators,
-} from './State';
-import { initialState } from './initialState'
+import { ActionCreators } from './actionCreators'
+import { AppReducer, reducer } from './State'
+import { AppContextState } from './state.model'
+import { initialState, getInitialState } from './initialState'
 
 export const AppContext = React.createContext<AppContextState>(
-    {} as AppContextState,
-);
-
+  initialState as AppContextState
+)
 
 export function AppContextProvider(props: any) {
-    const fullInitialState: AppContextState = {
-        ...initialState,
-    };
+  const [state, dispatch] = React.useReducer<AppReducer>(
+    reducer as any,
+    initialState
+  )
 
-    let [state, dispatch] = React.useReducer<AppReducer>(
-        reducer as any,
-        fullInitialState as any,
-    );
+  React.useEffect(() => {
+    async function init() {
+      const startingState = await getInitialState(initialState)
+      dispatch({
+        type: 'SET_INITIAL_STATE',
+        state: startingState,
+      })
+    }
+    init()
+  }, [])
 
-    return (
-        <AppContext.Provider
-            value={{
-                ...state,
-                dispatch: dispatch,
-            }}
-        >
-            {props.children}
-        </AppContext.Provider>
-    );
+  return (
+    <AppContext.Provider
+      value={{
+        ...state,
+        dispatch: dispatch,
+      }}
+    >
+      {props.children}
+    </AppContext.Provider>
+  )
 }
-export const AppContextConsumer = AppContext.Consumer;
-
+export const AppContextConsumer = AppContext.Consumer
 
 export const useAppState = () => {
-    const state = React.useContext(AppContext)
-    const actions = React.useMemo(() => {
-        return ActionCreators
-    }, [])
-    return [state, state.dispatch, actions] as const
+  const state = React.useContext(AppContext)
+  const actions = React.useMemo(() => {
+    return ActionCreators
+  }, [])
+  return [state, state.dispatch, actions] as const
 }
-
-
 
 // const logger = (red: typeof reducer) => {
 //     const reducerWithLogger = (state: AppContextState, action: Actions) => {
