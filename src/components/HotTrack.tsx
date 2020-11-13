@@ -1,6 +1,6 @@
 import { IonItem, IonThumbnail, IonLabel } from '@ionic/react'
 import React from 'react'
-import { Song } from 'src/appState'
+import { Song } from '../generated/apolloComponents'
 
 interface Props {
   track: Song

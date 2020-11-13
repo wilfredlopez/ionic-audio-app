@@ -23,8 +23,8 @@ import { APP_TITLE } from 'src/constants'
 import { getHotTracks } from '../appState'
 import './Home.css'
 
-import { useGetAllSongsLazyQuery } from 'src/hooks/useGetSongsQuery'
-import { Song } from 'src/appState'
+import { useGetAllSongsLazyQuery, Song } from '../generated/apolloComponents'
+
 const MAX = 10
 const initialStateStaticTracksCount = 3
 

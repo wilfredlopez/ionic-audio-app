@@ -1,4 +1,5 @@
-import { AppContextState, Song } from './state.model'
+import { AppContextState } from './state.model'
+import { Song } from '../generated/apolloComponents'
 import { deepCopy } from '@wilfredlopez/react-utils'
 function getSongIds(songs: Song[]) {
   return songs.map(song => song.id)

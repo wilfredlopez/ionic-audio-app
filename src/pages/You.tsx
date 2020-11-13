@@ -22,9 +22,9 @@ import { Logo } from 'src/components/Logo'
 import {
   getFavTracks,
   getRecentTracks,
-  Song,
   ActionCreators,
 } from '../appState'
+import { Song } from '../generated/apolloComponents'
 import urls from '../urls'
 
 const You = () => {

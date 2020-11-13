@@ -6,14 +6,13 @@ import TrackPlayer from './components/TrackPlayer'
 import Login from './pages/Login'
 import ResetPassword from './pages/ResetPassword'
 import Signup from './pages/Signup'
-import { useGetAllSongsQuery } from './hooks/useGetSongsQuery'
+import { useGetAllSongsQuery, Song } from './generated/apolloComponents'
 import { useAppState } from './appState/AppContextProvider'
 import Tabs from './Tabs'
 
 /* Theme variables */
 import './theme/variables.css'
 import urls from './urls'
-import { Song } from './appState/state.model'
 
 const cache: { [key: number]: Song[] } = {}
 

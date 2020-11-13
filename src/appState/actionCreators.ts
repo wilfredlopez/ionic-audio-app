@@ -1,7 +1,6 @@
 import {
   SET_PLAYER_OPEN_ACTION,
   PAUSE_ACTION,
-  Song,
   PLAY_ACTION,
   SEEK_ACTION,
   NEXT_ACTION,
@@ -15,6 +14,7 @@ import {
   User,
   LOGGED_IN_ACTION,
 } from '.'
+import { Song } from '../generated/apolloComponents'
 
 export const ActionCreators = {
   // Some state action creators

@@ -1,4 +1,5 @@
-import { AppContextState, Song } from './state.model'
+import { AppContextState } from './state.model'
+import { Song } from '../generated/apolloComponents'
 
 import { Storage } from '../utils/MyStorage'
 import { getMusic } from './state-utils'

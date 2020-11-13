@@ -13,9 +13,9 @@ import {
 } from '@ionic/react'
 import React, { useCallback, useRef, useState } from 'react'
 import { useAppState } from 'src/appState/AppContextProvider'
-import { useSearchSongsLazyQuery } from 'src/hooks/useSearchSongsQuery'
+import { useSearchSongsLazyQuery, Song } from '../generated/apolloComponents'
 // import { search } from "../search";
-import { Song, ActionCreators } from '../appState'
+import { ActionCreators } from '../appState'
 import { debounce } from '@wilfredlopez/react-utils'
 
 const Search = () => {

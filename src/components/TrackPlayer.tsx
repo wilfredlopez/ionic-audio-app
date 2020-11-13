@@ -32,7 +32,7 @@ import {
   getCurrentTrack,
   isFavTrack,
 } from '../appState'
-import { Song } from '../appState/state.model'
+import { Song } from '../generated/apolloComponents'
 
 import useAudioControls from '../hooks/useAudioControls'
 import './TrackPlayer.css'
@@ -115,16 +115,16 @@ const TrackControls = ({
           icon={play}
         />
       ) : (
-        <IonIcon
-          style={{
-            ...IconStyle,
-            transform: 'translate(0px, 10px)',
-          }}
-          onClick={onPause}
-          className='play-pause'
-          icon={pause}
-        />
-      )}
+          <IonIcon
+            style={{
+              ...IconStyle,
+              transform: 'translate(0px, 10px)',
+            }}
+            onClick={onPause}
+            className='play-pause'
+            icon={pause}
+          />
+        )}
       <IonIcon onClick={onNext} style={IconStyle} icon={playSkipForward} />
     </div>
   )

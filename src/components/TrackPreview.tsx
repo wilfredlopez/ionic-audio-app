@@ -5,12 +5,12 @@ import { useAppState } from 'src/appState/AppContextProvider'
 import {
   getCurrentTrack,
   getPlaying,
-  Song,
   PlayingState,
   ActionCreators,
 } from '../appState'
 import { StringHelper } from '@wilfredlopez/react-utils'
 import './TrackPreview.css'
+import { Song } from '../generated/apolloComponents'
 
 interface TrackProps {
   playing: PlayingState
@@ -83,8 +83,8 @@ const TrackPreview = () => {
           {!playing.isPlaying ? (
             <IonIcon icon={play} onClick={doPlayToggle} />
           ) : (
-            <IonIcon icon={pause} onClick={doPlayToggle} />
-          )}
+              <IonIcon icon={pause} onClick={doPlayToggle} />
+            )}
         </div>
       </div>
     </div>
